@@ -56,3 +56,29 @@ def test_mast_data_columns():
 def test_mast_get_sensors():
     mast = return_test_mast()
     
+
+##
+# Test Sensor class
+#
+
+def test_repr():
+    s = an.Sensor(type='dir', height=1.5, orient='NE', signal='max')
+    s1 = an.Sensor(height=1000)
+    assert repr(s) == 'DIR_2_NE_MAX'
+    assert repr(s1) == 'SPD_1000_AVG'
+    
+def test_asTup():
+    s = an.Sensor(type='dir', height=1.5, orient='NE', signal='max')
+    s1 = an.Sensor(height=1000)
+    assert s.asTup() == ('DIR', 1.5, 'NE', 'MAX', 'DIR_2_NE_MAX')
+    assert s1.asTup() == ('SPD', 1000, '-', 'AVG', 'SPD_1000_AVG')
+
+def test_parse():
+    s1 = an.Sensor(height=1000)
+    assert s1 == an.Sensor.parse(repr(s1))
+
+def test_fromTup():
+    s = an.Sensor(type='dir', height=1.5, orient='NE', signal='max')
+    s1 = an.Sensor(height=1000)
+    assert s == an.Sensor.fromTup(s.asTup())
+    assert s1 == an.Sensor.fromTup(s1.asTup())
