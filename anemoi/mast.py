@@ -834,3 +834,78 @@ Primary vane: {vane}'''.format(name=name,
     #         ## Save pdf code here
 
     #     return self_corr_plots
+
+class Sensor:
+    '''Object representing a sensor on a met mast.
+    Useful for selecting MetMast data columns and converting sensor representation on the fly
+    between string, tuple, and object form.
+
+    :instance variables:
+
+    type: string, default 'SPD'
+        typically one of the following:
+        'SPD', 'DIR', 'T', 'BP', 'RH'
+
+    height: integer, default 0
+
+    orient: string, default = '-'
+        exclusively one of the following:
+        'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'
+
+    signal: string, default = 'AVG'
+        typically one of the following:
+        'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', 'GF'
+    '''
+
+    def __init__(self, type='SPD', height=0, orient='-', signal='AVG'):
+        self.type = type.upper()
+        self.height = height
+        self.orient = orient
+        self.signal = signal.upper()
+
+    def asTup(self):
+        '''Returns a tuple of sensor information. This can be passed to a dataframe and
+        conforms to MultiIndex use.
+        '''
+        return (self.type, self.height, self.orient, self.signal, repr(self))
+
+    def __repr__(self):
+        '''Returns the string form of the sensor
+        '''
+        orient = ''
+        if self.orient != '-':
+            orient = '%s_' % self.orient
+        return '%s_%d_%s%s' % (self.type, round(self.height), orient, self.signal)
+
+    def copy(self):
+        '''Returns an exact copy of the sensor
+        '''
+        return Sensor(self.type, self.height, self.orient, self.signal)
+
+    def __eq__(self, other):
+        return self.type, self.height, self.orient, self.signal == other.type, other.height, other.orient, other.signal
+
+    @staticmethod
+    def parse(name):
+        '''Returns a sensor object
+        :Parameters:
+
+        name: string
+            the string representation of the sensor you want to create
+        '''
+        parts = name.split('_')
+        orient = '-'
+        if len(parts) >= 4:
+            orient = parts[2]
+        return Sensor(parts[0], float(parts[1]), orient, parts[len(parts) - 1])
+
+    @staticmethod
+    def fromTup(tup):
+        '''Returns a sensor object
+        :Parameters:
+
+        tup: length 4 iterable
+            sensor properties in the order (type, height, orient, signal)
+        '''
+        return Sensor(type=tup[0].upper(), height=tup[1], orient=tup[2], signal=tup[3].upper())
+
