@@ -850,18 +850,25 @@ class Sensor:
 
     orient: string, default = '-'
         exclusively one of the following:
-        'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'
+        '-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', or 'SM'
 
     signal: string, default = 'AVG'
         typically one of the following:
-        'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', 'GF'
+        'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', or 'GF'
     '''
 
     def __init__(self, type='SPD', height=0, orient='-', signal='AVG'):
         self.type = type.upper()
         self.height = height
+        self._checkOrient(orient) #raise error if orient is orientation is not valid
         self.orient = orient
         self.signal = signal.upper()
+
+    def _checkOrient(self, orient):
+        if orient in ['-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'SM']:
+            pass
+        else:
+            raise(Exception("the orientation should be '-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', or 'SM' "))
 
     def asTup(self):
         '''Returns a tuple of sensor information. This can be passed to a dataframe and
