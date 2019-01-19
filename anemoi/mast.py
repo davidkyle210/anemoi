@@ -857,18 +857,16 @@ class Sensor:
         'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', or 'GF'
     '''
 
-    def __init__(self, type='SPD', height=0, orient='-', signal='AVG'):
+    def __init__(self, type='SPD', height=0, orient='-', signal='AVG', angle=None):
         self.type = type.upper()
         self.height = height
         self._checkOrient(orient) #raise error if orient is orientation is not valid
         self.orient = orient
+        if angle is not None:
+            self.orient = self._sector(angle)
+        self._checkOrientIsConsistentWithAngle(orient, angle) #make sure orient and angle are consistent
         self.signal = signal.upper()
-
-    def _checkOrient(self, orient):
-        if orient in ['-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'SM']:
-            pass
-        else:
-            raise(Exception("the orientation should be '-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', or 'SM' "))
+        self.angle = angle
 
     def asTup(self):
         '''Returns a tuple of sensor information. This can be passed to a dataframe and
@@ -915,4 +913,27 @@ class Sensor:
             sensor properties in the order (type, height, orient, signal)
         '''
         return Sensor(type=tup[0].upper(), height=tup[1], orient=tup[2], signal=tup[3].upper())
+
+    @staticmethod
+    def _sector(angle):
+        if angle is None:
+            return '-'
+        elif angle == -1:
+            return 'SM'  # in M2D2 single mounting angle is given as -1
+        directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+        sector_width = 360.0 / len(directions)
+        return directions[int(((angle + sector_width / 2.0) % 360) // sector_width)]
+
+    @staticmethod
+    def _checkOrientIsConsistentWithAngle(orient, angle):
+        if angle is not None:
+            if Sensor._sector(angle) != orient:
+                raise (Exception('orient and angle must be consistent with each other'))
+
+    @staticmethod
+    def _checkOrient(orient):
+        if orient in ['-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'SM']:
+            pass
+        else:
+            raise (Exception("the orientation should be '-', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', or 'SM' "))
 
