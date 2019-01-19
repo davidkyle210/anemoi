@@ -857,7 +857,7 @@ class Sensor:
         'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', or 'GF'
     '''
 
-    def __init__(self, type='SPD', height=0, orient='-', signal='AVG', angle=None):
+    def __init__(self, type='SPD', height=0, orient='-', signal='AVG', angle=None, tag=''):
         self.type = type.upper()
         self.height = height
         self._checkOrient(orient) #raise error if orient is orientation is not valid
@@ -867,6 +867,7 @@ class Sensor:
         self._checkOrientIsConsistentWithAngle(orient, angle) #make sure orient and angle are consistent
         self.signal = signal.upper()
         self.angle = angle
+        self.tag = tag
 
     def asTup(self):
         '''Returns a tuple of sensor information. This can be passed to a dataframe and
@@ -880,7 +881,10 @@ class Sensor:
         orient = ''
         if self.orient != '-':
             orient = '%s_' % self.orient
-        return '%s_%d_%s%s' % (self.type, round(self.height), orient, self.signal)
+        tag = ''
+        if self.tag != '':
+            tag = '_%s' % self.tag
+        return '%s_%d_%s%s%s' % (self.type, round(self.height), orient, self.signal, tag)
 
     def copy(self):
         '''Returns an exact copy of the sensor
@@ -888,21 +892,7 @@ class Sensor:
         return Sensor(self.type, self.height, self.orient, self.signal)
 
     def __eq__(self, other):
-        return self.type, self.height, self.orient, self.signal == other.type, other.height, other.orient, other.signal
-
-    @staticmethod
-    def parse(name):
-        '''Returns a sensor object
-        :Parameters:
-
-        name: string
-            the string representation of the sensor you want to create
-        '''
-        parts = name.split('_')
-        orient = '-'
-        if len(parts) >= 4:
-            orient = parts[2]
-        return Sensor(parts[0], float(parts[1]), orient, parts[len(parts) - 1])
+        return self.type, self.height, self.orient, self.signal, self.angle, self.tag == other.type, other.height, other.orient, other.signal, other.angle, other.tag
 
     @staticmethod
     def fromTup(tup):
