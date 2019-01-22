@@ -846,7 +846,7 @@ class Sensor:
         typically one of the following:
         'SPD', 'DIR', 'T', 'BP', 'RH'
 
-    height: integer, default 0
+    height: float, default 0
 
     orient: string, default = '-'
         exclusively one of the following:
@@ -855,6 +855,8 @@ class Sensor:
     signal: string, default = 'AVG'
         typically one of the following:
         'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', or 'GF'
+
+    angle: float between 0 (inclusive) and 360 (exclusive)
     '''
 
     def __init__(self, type='SPD', height=0, orient='-', signal='AVG', angle=None, tag=''):
