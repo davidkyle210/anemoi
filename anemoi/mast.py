@@ -909,10 +909,14 @@ class Sensor:
         '''Returns a sensor object
         :Parameters:
 
-        tup: length 4 iterable
-            sensor properties in the order (type, height, orient, signal)
+        tup: length 5 iterable
+            sensor properties in the order (type, height, orient, signal, sensorName)
         '''
-        return Sensor(type=tup[0].upper(), height=tup[1], orient=tup[2], signal=tup[3].upper())
+        tag = ''
+        for x in tup[4].split('_'):
+            if x.upper() not in [str(y).upper() for y in tup]:
+                tag = x
+        return Sensor(type=tup[0].upper(), height=tup[1], orient=tup[2], signal=tup[3].upper(), tag=tag)
 
     @staticmethod
     def _sector(angle):

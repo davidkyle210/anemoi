@@ -63,22 +63,18 @@ def test_mast_get_sensors():
 
 def test_repr():
     s = an.Sensor(type='dir', height=1.5, orient='NE', signal='max')
-    s1 = an.Sensor(height=1000)
+    s1 = an.Sensor(height=1000, tag='A')
     assert repr(s) == 'DIR_2_NE_MAX'
-    assert repr(s1) == 'SPD_1000_AVG'
+    assert repr(s1) == 'SPD_1000_AVG_A'
     
 def test_asTup():
     s = an.Sensor(type='dir', height=1.5, orient='NE', signal='max')
-    s1 = an.Sensor(height=1000)
+    s1 = an.Sensor(height=1000, tag='A')
     assert s.asTup() == ('DIR', 1.5, 'NE', 'MAX', 'DIR_2_NE_MAX')
-    assert s1.asTup() == ('SPD', 1000, '-', 'AVG', 'SPD_1000_AVG')
-
-def test_parse():
-    s1 = an.Sensor(height=1000)
-    assert s1 == an.Sensor.parse(repr(s1))
+    assert s1.asTup() == ('SPD', 1000, '-', 'AVG', 'SPD_1000_AVG_A')
 
 def test_fromTup():
     s = an.Sensor(type='dir', height=1.5, orient='NE', signal='max')
-    s1 = an.Sensor(height=1000)
+    s1 = an.Sensor(height=1000, tag='A')
     assert s == an.Sensor.fromTup(s.asTup())
     assert s1 == an.Sensor.fromTup(s1.asTup())
