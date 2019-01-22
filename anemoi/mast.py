@@ -856,16 +856,24 @@ class Sensor:
         typically one of the following:
         'AVG', 'FLAG', 'MIN', 'MAX', 'SD', 'COMB', 'EXT', 'HH', 'LT', or 'GF'
 
-    angle: float between 0 (inclusive) and 360 (exclusive)
+    tag: string, default '' (empty string)
+        typically 'A', 'B', 'C', etc.
+        used to differentiate between sensors with the same attributes
+
+    angle: int between -1 and 359, default None
+        angle of the sensor boom with reference to north where clockwise is the positive direction
+        use -1 if the sensor is a stub mount
+
     '''
 
-    def __init__(self, type='SPD', height=0, orient='-', signal='AVG', angle=None, tag=''):
+    def __init__(self, type='SPD', height=0, orient='-', signal='AVG', tag='', angle=None):
         self.type = type.upper()
         self.height = height
         self._checkOrient(orient) #raise error if orient is orientation is not valid
-        self.orient = orient
-        if angle is not None:
+        if orient == '-':
             self.orient = self._sector(angle)
+        else:
+            self.orient = orient
         self._checkOrientIsConsistentWithAngle(orient, angle) #make sure orient and angle are consistent
         self.signal = signal.upper()
         self.angle = angle
