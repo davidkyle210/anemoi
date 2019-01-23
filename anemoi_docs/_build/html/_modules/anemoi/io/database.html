@@ -65,7 +65,7 @@
 <span class="k">def</span> <span class="nf">sql_list_from_mvs_ids</span><span class="p">(</span><span class="n">mvs_ids</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mvs_ids</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">mvs_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvs_ids</span><span class="p">]</span>
-    <span class="n">mvs_ids_list</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">f</span><span class="s2">&quot;(&#39;</span><span class="si">{mvs_id}</span><span class="s2">_1&#39;)&quot;</span> <span class="k">for</span> <span class="n">mvs_id</span> <span class="ow">in</span> <span class="n">mvs_ids</span><span class="p">])</span>
+    <span class="n">mvs_ids_list</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">f</span><span class="s2">&quot;(</span><span class="si">{mvs_id}</span><span class="s2">_1)&quot;</span> <span class="k">for</span> <span class="n">mvs_id</span> <span class="ow">in</span> <span class="n">mvs_ids</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">mvs_ids_list</span>
 
 <span class="k">def</span> <span class="nf">rename_mvs_id_column</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">types</span><span class="p">):</span>
@@ -75,7 +75,7 @@
 
 <span class="c1"># Define DataBase class</span>
 <div class="viewcode-block" id="M2D2"><a class="viewcode-back" href="../../../code_io_database.html#anemoi.io.database.M2D2">[docs]</a><span class="k">class</span> <span class="nc">M2D2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Class to connect to standard RAG databases</span>
+    <span class="sd">&#39;&#39;&#39;Class to connect to RAG M2D2 PRD database</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -93,7 +93,8 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="s1">&#39;M2D2&#39;</span>
-        <span class="n">server</span> <span class="o">=</span> <span class="s1">&#39;10.1.15.53&#39;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="s1">&#39;10.1.15.53&#39;</span> <span class="c1"># PRD</span>
+        <span class="c1">#server = &#39;SDHQRAGDBDEV01\RAGSQLDBSTG&#39; #STG</span>
         <span class="n">db</span> <span class="o">=</span> <span class="s1">&#39;M2D2_DB_BE&#39;</span>
         
         <span class="n">conn_str</span> <span class="o">=</span> <span class="s1">&#39;DRIVER={SQL Server}; SERVER=</span><span class="si">%s</span><span class="s1">; DATABASE=</span><span class="si">%s</span><span class="s1">; Trusted_Connection=yes&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
@@ -231,22 +232,21 @@
         
         <span class="n">mvs_ids_list</span> <span class="o">=</span> <span class="n">sql_list_from_mvs_ids</span><span class="p">(</span><span class="n">mvs_ids</span><span class="p">)</span>
         <span class="n">sql_query</span><span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">DECLARE @ColumnListID udtt_ColumnListID</span>
-<span class="s2">DECLARE @startDate DATETIME     </span>
-<span class="s2">DECLARE @endDate DATETIME     </span>
+<span class="s2">             SET NOCOUNT ON</span>
+<span class="s2">             DECLARE @ColumnListID NVARCHAR(4000) </span>
+<span class="s2">                   ,@startDate    DATETIME2      </span>
+<span class="s2">                   ,@endDate      DATETIME2      </span>
 
-<span class="s2">INSERT INTO @ColumnListID (column_id)</span>
-<span class="s2">VALUES</span>
-<span class="si">{mvs_ids_list}</span><span class="s2"></span>
-<span class="s2">SET @startDate = NULL</span>
-<span class="s2">SET @endDate   = NULL</span>
-<span class="s2">SET NOCOUNT ON;</span>
-<span class="s2">    </span>
-<span class="s2">EXECUTE [dbo].[proc_DataExport_GetDataByColumnList]</span>
-<span class="s2">         @ColumnListID       </span>
-<span class="s2">        ,@startDate</span>
-<span class="s2">        ,@endDate</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SET @ColumnListID= &#39;</span><span class="si">{mvs_ids_list}</span><span class="s2">&#39;</span>
+<span class="s2">            SET @startDate   = NULL</span>
+<span class="s2">            SET @endDate     = NULL</span>
+
+<span class="s2">            EXECUTE [dbo].[proc_DataExport_GetDataByColumnList]</span>
+<span class="s2">                @ColumnListID             </span>
+<span class="s2">                ,@startDate</span>
+<span class="s2">                ,@endDate</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql_query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;CorrectedTimestamp&#39;</span><span class="p">)</span>
         <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;stamp&#39;</span>
         <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;sensor&#39;</span>
@@ -344,7 +344,7 @@
 
 <span class="c1"># Define Turbine class</span>
 <div class="viewcode-block" id="Turbine"><a class="viewcode-back" href="../../../code_io_database.html#anemoi.io.database.Turbine">[docs]</a><span class="k">class</span> <span class="nc">Turbine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Class to connect to standard RAG databases</span>
+    <span class="sd">&#39;&#39;&#39;Class to connect to EDF Wind Turbine database</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -443,7 +443,7 @@
 
 <span class="c1"># Define Padre class</span>
 <div class="viewcode-block" id="Padre"><a class="viewcode-back" href="../../../code_io_database.html#anemoi.io.database.Padre">[docs]</a><span class="k">class</span> <span class="nc">Padre</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Class to connect to standard RAG databases</span>
+    <span class="sd">&#39;&#39;&#39;Class to connect to PRE Padre database</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="s1">&#39;PADREScada&#39;</span><span class="p">,</span> <span class="n">conn_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">conn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">domino</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -996,6 +996,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../code_analysis_freq_dist.html">Analysis - Freq Dist</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../code_plotting_shear.html">Plotting - Shear</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../code_plotting_correlate.html">Plotting - Correlate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_analysis_sphinx_doc.html">Analysis – Sphinx doc page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_analysis_sphinx_doc2.html">Title for Sphinx Demo</a></li>
 </ul>
 
 <div class="relations">
@@ -1019,14 +1021,6 @@
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -1036,7 +1030,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
     </div>
 

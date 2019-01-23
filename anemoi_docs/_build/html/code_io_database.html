@@ -45,7 +45,7 @@
 <dl class="class">
 <dt id="anemoi.io.database.M2D2">
 <em class="property">class </em><code class="descclassname">anemoi.io.database.</code><code class="descname">M2D2</code><a class="reference internal" href="_modules/anemoi/io/database.html#M2D2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anemoi.io.database.M2D2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to connect to standard RAG databases</p>
+<dd><p>Class to connect to RAG M2D2 PRD database</p>
 <dl class="method">
 <dt id="anemoi.io.database.M2D2.data_from_mast_wmm_id">
 <code class="descname">data_from_mast_wmm_id</code><span class="sig-paren">(</span><em>wmm_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anemoi/io/database.html#M2D2.data_from_mast_wmm_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anemoi.io.database.M2D2.data_from_mast_wmm_id" title="Permalink to this definition">¶</a></dt>
@@ -209,7 +209,7 @@ For example: ‘AVG’, ‘SD’, ‘MIN’, ‘MAX’, ‘GUST’</dd>
 <dl class="class">
 <dt id="anemoi.io.database.Padre">
 <em class="property">class </em><code class="descclassname">anemoi.io.database.</code><code class="descname">Padre</code><span class="sig-paren">(</span><em>database='PADREScada'</em>, <em>conn_str=None</em>, <em>conn=None</em>, <em>domino=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anemoi/io/database.html#Padre"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anemoi.io.database.Padre" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to connect to standard RAG databases</p>
+<dd><p>Class to connect to PRE Padre database</p>
 <dl class="method">
 <dt id="anemoi.io.database.Padre.assets">
 <code class="descname">assets</code><span class="sig-paren">(</span><em>project=None</em>, <em>turbines_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anemoi/io/database.html#Padre.assets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anemoi.io.database.Padre.assets" title="Permalink to this definition">¶</a></dt>
@@ -250,7 +250,7 @@ List of all projects within Padre</p>
 <dl class="class">
 <dt id="anemoi.io.database.Turbine">
 <em class="property">class </em><code class="descclassname">anemoi.io.database.</code><code class="descname">Turbine</code><a class="reference internal" href="_modules/anemoi/io/database.html#Turbine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anemoi.io.database.Turbine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to connect to standard RAG databases</p>
+<dd><p>Class to connect to EDF Wind Turbine database</p>
 <dl class="method">
 <dt id="anemoi.io.database.Turbine.metadata">
 <code class="descname">metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/anemoi/io/database.html#Turbine.metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anemoi.io.database.Turbine.metadata" title="Permalink to this definition">¶</a></dt>
@@ -306,6 +306,7 @@ List of all projects within Padre</p>
 <li class="toctree-l1"><a class="reference internal" href="code_analysis_freq_dist.html">Analysis - Freq Dist</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_plotting_shear.html">Plotting - Shear</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_plotting_correlate.html">Plotting - Correlate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_analysis_sphinx_doc.html">Analysis – Sphinx doc page</a></li>
 </ul>
 
 <div class="relations">
@@ -329,14 +330,6 @@ List of all projects within Padre</p>
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -346,7 +339,7 @@ List of all projects within Padre</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="_sources/code_io_database.rst.txt"
