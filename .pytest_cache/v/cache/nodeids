@@ -1,0 +1,18 @@
+[
+  "tests/test_mast.py::test_is_mast",
+  "tests/test_mast.py::test_mast_name",
+  "tests/test_mast.py::test_mast_lat",
+  "tests/test_mast.py::test_mast_lon",
+  "tests/test_mast.py::test_mast_primary_ano",
+  "tests/test_mast.py::test_mast_primary_vane",
+  "tests/test_mast.py::test_mast_data",
+  "tests/test_mast.py::test_mast_data_index",
+  "tests/test_mast.py::test_mast_data_columns",
+  "tests/test_mast.py::test_mast_get_sensors",
+  "tests/test_mast.py::test_repr",
+  "tests/test_mast.py::test_asTup",
+  "tests/test_mast.py::test_sector",
+  "tests/test_mast.py::test_checkOrientIsConsistentWithAngle",
+  "tests/test_mast.py::test_checkOrient",
+  "tests/test_mast.py::test_check_orient_angle_behavior_in_constructor"
+]

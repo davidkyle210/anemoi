@@ -1,0 +1,4 @@
+{
+  "tests/test_mast.py::test_checkOrientIsConsistentWithAngle": true,
+  "tests/test_mast.py::test_sector": true
+}

@@ -80,19 +80,19 @@ def test_sector():
     assert an.Sensor._sector(0) == 'N'
     assert an.Sensor._sector(0.1) == 'N'
     assert an.Sensor._sector(359.9) == 'N'
-    assert an.Sensor._sector(180+365.0/16 + 0.1) == 'SW'
-    assert an.Sensor._sector(180+365.0/16 - 0.1) == 'S'
+    assert an.Sensor._sector(180+360.0/16 + 0.1) == 'SW'
+    assert an.Sensor._sector(180+360.0/16 - 0.1) == 'S'
 
 def test_checkOrientIsConsistentWithAngle():
     an.Sensor._checkOrientIsConsistentWithAngle('-', None)
     an.Sensor._checkOrientIsConsistentWithAngle('-', 359)
     an.Sensor._checkOrientIsConsistentWithAngle('NW', None)
-    an.Sensor._checkOrientIsConsistentWithAngle('SW', 180+365.0/16 + 0.1)
-    an.Sensor._checkOrientIsConsistentWithAngle('S', 180+365.0/16 - 0.1)
+    an.Sensor._checkOrientIsConsistentWithAngle('SW', 180+360.0/16 + 0.1)
+    an.Sensor._checkOrientIsConsistentWithAngle('S', 180+360.0/16 - 0.1)
     with pytest.raises(Exception):
-        an.Sensor._checkOrientIsConsistentWithAngle('S', 180+365.0/16 + 0.1)
+        an.Sensor._checkOrientIsConsistentWithAngle('S', 180+360.0/16 + 0.1)
     with pytest.raises(Exception):
-        an.Sensor._checkOrientIsConsistentWithAngle('SW', 180+365.0/16 - 0.1)
+        an.Sensor._checkOrientIsConsistentWithAngle('SW', 180+360.0/16 - 0.1)
 
 
 def test_checkOrient():
