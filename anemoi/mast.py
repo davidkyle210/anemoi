@@ -902,21 +902,8 @@ class Sensor:
         return Sensor(self.type, self.height, self.orient, self.signal)
 
     def __eq__(self, other):
-        return self.type, self.height, self.orient, self.signal, self.angle, self.tag == other.type, other.height, other.orient, other.signal, other.angle, other.tag
-
-    @staticmethod
-    def fromTup(tup):
-        '''Returns a sensor object
-        :Parameters:
-
-        tup: length 5 iterable
-            sensor properties in the order (type, height, orient, signal, sensorName)
-        '''
-        tag = ''
-        for x in tup[4].split('_'):
-            if x.upper() not in [str(y).upper() for y in tup]:
-                tag = x
-        return Sensor(type=tup[0].upper(), height=tup[1], orient=tup[2], signal=tup[3].upper(), tag=tag)
+        return self.type, self.height, self.orient, self.signal, self.angle, self.tag \
+               == other.type, other.height, other.orient, other.signal, other.angle, other.tag
 
     @staticmethod
     def _sector(angle):
@@ -930,7 +917,7 @@ class Sensor:
 
     @staticmethod
     def _checkOrientIsConsistentWithAngle(orient, angle):
-        if angle is not None:
+        if angle is not None and orient != '-':
             if Sensor._sector(angle) != orient:
                 raise (Exception('orient and angle must be consistent with each other'))
 
